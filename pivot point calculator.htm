@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pivot Point Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      background: #f2f2f2;
+    }
+    .container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 400px;
+      margin: auto;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 8px;
+      margin-top: 4px;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px;
+      width: 100%;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .result {
+      margin-top: 20px;
+      text-align: center;
+    }
+    .level {
+      margin: 5px 0;
+      font-weight: bold;
+    }
+    .resistance {
+      color: #d32f2f;
+    }
+    .pivot {
+      color: #1976d2;
+    }
+    .support {
+      color: #388e3c;
+    }
+    .extra-table {
+      margin-top: 20px;
+      background-color: #f9f9f9;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 0 6px rgba(0,0,0,0.05);
+    }
+    .extra-table h2 {
+      margin-bottom: 10px;
+      font-size: 18px;
+      color: #555;
+    }
+    .central-level {
+      margin: 5px 0;
+      font-weight: bold;
+      color: #6a1b9a;
+    }
+    .range-level {
+      margin-top: 10px;
+      font-weight: bold;
+      color: #ff6f00;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Pivot Point Calculator</h1>
+  <label for="high">High:</label>
+  <input type="number" id="high" step="0.01">
+
+  <label for="low">Low:</label>
+  <input type="number" id="low" step="0.01">
+
+  <label for="close">Close:</label>
+  <input type="number" id="close" step="0.01">
+
+  <button onclick="calculatePivot()">Calculate</button>
+
+  <div class="result" id="result"></div>
+</div>
+
+<script>
+  function calculatePivot() {
+    const high = parseFloat(document.getElementById("high").value);
+    const low = parseFloat(document.getElementById("low").value);
+    const close = parseFloat(document.getElementById("close").value);
+
+    if (isNaN(high) || isNaN(low) || isNaN(close)) {
+      alert("Please enter valid numbers.");
+      return;
+    }
+
+    const pivot = (high + low + close) / 3;
+    const R1 = (2 * pivot) - low;
+    const S1 = (2 * pivot) - high;
+    const R2 = pivot + (high - low);
+    const S2 = pivot - (high - low);
+    const R3 = high + 2 * (pivot - low);
+    const S3 = low - 2 * (high - pivot);
+
+    const bc = (high + low) / 2;
+    const tc = (pivot - bc) + pivot; // or 2 * pivot - bc
+    const range = bc - tc;
+
+    document.getElementById("result").innerHTML = `
+      <div class="level resistance">Resistance 3 (R3): ${R3.toFixed(2)}</div>
+      <div class="level resistance">Resistance 2 (R2): ${R2.toFixed(2)}</div>
+      <div class="level resistance">Resistance 1 (R1): ${R1.toFixed(2)}</div>
+      <div class="level pivot">Pivot Point (P): ${pivot.toFixed(2)}</div>
+      <div class="level support">Support 1 (S1): ${S1.toFixed(2)}</div>
+      <div class="level support">Support 2 (S2): ${S2.toFixed(2)}</div>
+      <div class="level support">Support 3 (S3): ${S3.toFixed(2)}</div>
+
+      <div class="extra-table">
+        <h2>Central Levels</h2>
+        <div class="central-level">Top Central (TC): ${tc.toFixed(2)}</div>
+        <div class="central-level">Bottom Central (BC): ${bc.toFixed(2)}</div>
+      </div>
+
+      <div class="extra-table">
+        <h2>Range</h2>
+        <div class="range-level">BC - TC Range: ${range.toFixed(2)}</div>
+      </div>
+    `;
+  }
+</script>
+
+</body>
+</html>
